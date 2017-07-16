@@ -1,0 +1,43 @@
+# web-controller.yml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    name: web
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        name: web
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: default-pool
+      containers:
+      - image: gcr.io/gcedemo-173901/gcedemoapp:v1
+        name: web
+        ports:
+        - containerPort: 3000
+          name: http-server
+        livenessProbe:
+          httpGet:
+            path: /_health
+            port: 3000
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /_health
+            port: 3000
+          initialDelaySeconds: 30
+          timeoutSeconds: 1

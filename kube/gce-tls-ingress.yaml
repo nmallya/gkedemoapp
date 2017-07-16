@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gke-ingress 
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    # kubernetes.io/ingress.allow-http: "false"
+    #ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  tls:
+  # This assumes tls-secret exists.
+  - secretName: gkecert
+  backend:
+    serviceName: web
+    servicePort: 443

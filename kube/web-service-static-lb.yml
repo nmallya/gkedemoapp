@@ -1,0 +1,17 @@
+# web-service-static-lb.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  labels:
+    name: web
+spec:
+  type: LoadBalancer
+  # use your external IP here
+  # loadBalancerIP: 35.188.81.221
+  ports:
+    - port: 443
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    name: web
