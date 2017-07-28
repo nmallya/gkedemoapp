@@ -1,24 +1,6 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+kubectl create secret generic cloudsql-instance-credentials \
+                        --from-file=credentials.json=./private/gcedemo.json
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+kubectl create secret generic cloudsql-db-credentials --from-literal=username=dogs_admin --from-literal=password=password

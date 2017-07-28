@@ -19,6 +19,7 @@ RUN apt-get install -y --no-install-recommends \
   libxslt-dev \
   libsqlite3-dev \
   mysql-client \
+  libmysqlclient-dev \
   sqlite3
 # install bundler
 RUN gem install bundler
