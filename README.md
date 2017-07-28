@@ -1,6 +1,5 @@
 # README
+This repository contains sample code needed to deploy a Rails 5 application to Google Cloud Platform using Kubernetes 1.6
+It also contains sample code that shows how to connect from a Rails application in GKE to a CloudSQL instance using a cloudsql proxy
 
-kubectl create secret generic cloudsql-instance-credentials \
-                        --from-file=credentials.json=./private/gcedemo.json
-
-kubectl create secret generic cloudsql-db-credentials --from-literal=username=dogs_admin --from-literal=password=password
+It is referenced in the article: https://medium.com/@nithinmallya4/deploying-a-rails-application-to-google-container-engine-with-kubernetes-b08b2de353fc
