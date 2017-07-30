@@ -18,6 +18,21 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Set up Google env variables and build container
+          command: |
+            export IMAGE=gcr.io/gcedemo-173901/gkedemoapp:$CIRCLE_SHA1
+            echo $GOOGLE_AUTH | base64 --decode -i > ${HOME}/account-auth.json
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update kubectl
+            sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/account-auth.json
+            sudo /opt/google-cloud-sdk/bin/gcloud config set project $GOOGLE_PROJECT_ID
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster $GOOGLE_CLUSTER_NAME
+            sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone $GOOGLE_COMPUTE_ZONE
+            sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $GOOGLE_CLUSTER_NAME
+            docker build -t gkedemoapp -f Dockerfile .
+            docker tag gkedemoapp $IMAGE
+            sudo /opt/google-cloud-sdk/bin/gcloud docker -- push $IMAGE
 
       # Download and cache dependencies
       - restore_cache:
@@ -59,3 +74,10 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+
+    deploy:
+        machine:
+            enabled: true
+        working_directory: ~/repo
+        steps:
+          - run: bundle exec rails server -b "0.0.0.0"
