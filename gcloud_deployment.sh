@@ -19,23 +19,12 @@ kubectl rollout status deployment web
 # For SUBSEQUENT DEPLOYMENTS  -------------------------------------------------------------------- END
 
 # For FIRST TIME DEPLOYMENT  -------------------------------------------------------------------- BEGIN
-# kubectl create secret generic cloudsql-instance-credentials \
-#                         --from-file=credentials.json=./private/gcedemo.json
-#
-# kubectl create secret generic cloudsql-db-credentials --from-literal=username=dogs_admin --from-literal=password=password
-#
 #
 # # Set up the Deployment and Service
 # # # create new ones
 # kubectl create -f ./kube/web-deployment.yml --record
 # kubectl create -f ./kube/web-service-static-lb.yml
 #
-# # FOR TESTING GOOGLE CLOUD SQL PROXY
-# kubectl delete -f ./kube/web-deployment-cloudsqlproxy.yml
-# kubectl create -f ./kube/web-deployment-cloudsqlproxy.yml --record
-# kubectl delete -f ./kube/web-service-static-lb.yml
-# kubectl create -f ./kube/web-service-static-lb.yml
-# # FOR TESTING GOOGLE CLOUD SQL PROXY
 #
 #
 # # #
@@ -47,7 +36,7 @@ kubectl rollout status deployment web
 # gcloud compute forwarding-rules list
 #
 #
-# # Cert and TLS
+# # Cert and TLS  (Article I - barebones rails app on GKE)
 # kubectl create secret tls gkecert --key ./ssl_cert/example.key --cert ./ssl_cert/example.crt
 # # #
 # # # Create the ingress
@@ -55,3 +44,19 @@ kubectl rollout status deployment web
 # kubectl create -f ./kube/gce-tls-ingress.yaml
 # kubectl describe ing gke-ingress
 # # For FIRST TIME DEPLOYMENT  -------------------------------------------------------------------- END
+
+
+# For Article II (CloudSQL Proxy for the above app)
+# for using the CloudSQL Proxy (create a GCP credentials file for your service account - gcedemo.json in my case)
+# kubectl create secret generic cloudsql-instance-credentials \
+#                         --from-file=credentials.json=./private/gcedemo.json
+#
+# kubectl create secret generic cloudsql-db-credentials --from-literal=username=dogs_admin --from-literal=password=password
+# # FOR TESTING GOOGLE CLOUD SQL PROXY
+# kubectl delete -f ./kube/web-deployment-cloudsqlproxy.yml
+# kubectl create -f ./kube/web-deployment-cloudsqlproxy.yml --record
+# kubectl delete -f ./kube/web-service-static-lb.yml
+# kubectl create -f ./kube/web-service-static-lb.yml
+# # FOR TESTING GOOGLE CLOUD SQL PROXY
+
+
